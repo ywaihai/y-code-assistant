@@ -2,7 +2,7 @@ package com.waihai.ycodeassistant.service;
 
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.service.IService;
-import com.waihai.ycodeassistant.model.dto.UserQueryRequest;
+import com.waihai.ycodeassistant.model.dto.user.UserQueryRequest;
 import com.waihai.ycodeassistant.model.entity.User;
 import com.waihai.ycodeassistant.model.vo.LoginUserVO;
 import com.waihai.ycodeassistant.model.vo.UserVO;

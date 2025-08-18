@@ -8,7 +8,7 @@ import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.waihai.ycodeassistant.exception.BusinessException;
 import com.waihai.ycodeassistant.exception.ErrorCode;
 import com.waihai.ycodeassistant.mapper.UserMapper;
-import com.waihai.ycodeassistant.model.dto.UserQueryRequest;
+import com.waihai.ycodeassistant.model.dto.user.UserQueryRequest;
 import com.waihai.ycodeassistant.model.entity.User;
 import com.waihai.ycodeassistant.model.enums.UserRoleEnum;
 import com.waihai.ycodeassistant.model.vo.LoginUserVO;

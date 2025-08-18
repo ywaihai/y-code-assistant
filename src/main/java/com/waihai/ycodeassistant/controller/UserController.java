@@ -10,7 +10,7 @@ import com.waihai.ycodeassistant.constant.UserConstant;
 import com.waihai.ycodeassistant.exception.BusinessException;
 import com.waihai.ycodeassistant.exception.ErrorCode;
 import com.waihai.ycodeassistant.exception.ThrowUtils;
-import com.waihai.ycodeassistant.model.dto.*;
+import com.waihai.ycodeassistant.model.dto.user.*;
 import com.waihai.ycodeassistant.model.entity.User;
 import com.waihai.ycodeassistant.model.vo.LoginUserVO;
 import com.waihai.ycodeassistant.model.vo.UserVO;

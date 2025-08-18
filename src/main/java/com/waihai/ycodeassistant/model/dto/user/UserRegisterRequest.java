@@ -1,4 +1,4 @@
-package com.waihai.ycodeassistant.model.dto;
+package com.waihai.ycodeassistant.model.dto.user;
 
 import lombok.Data;
 

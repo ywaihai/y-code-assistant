@@ -17,11 +17,11 @@ public abstract class CodeFileSaverTemplate<T> {
      */
     private static final String FILE_SAVE_ROOT_DIR = System.getProperty("user.dir") + "/tmp/code_output";
 
-    public final File saveCode(T result) {
+    public final File saveCode(T result, Long appId) {
         // 1.校验
         validateContent(result);
         // 2.构建路径
-        String baseDirPath = buildUniqueDir();
+        String baseDirPath = buildUniqueDir(appId);
         // 3.保存为文件
         saveFiles(result, baseDirPath);
         // 4.返回文件目录对象
@@ -39,9 +39,12 @@ public abstract class CodeFileSaverTemplate<T> {
      *
      * @return 文件路径
      */
-    protected String buildUniqueDir() {
+    protected String buildUniqueDir(Long appId) {
+        if (appId == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "应用 ID 不能为空");
+        }
         String bizType = getCodeGenTypeEnum().getValue();
-        String uniqueDirName = StrUtil.format("{}_{}", bizType, IdUtil.getSnowflakeNextIdStr());
+        String uniqueDirName = StrUtil.format("{}_{}", bizType, appId);
         String dirPath = FILE_SAVE_ROOT_DIR + File.separator + uniqueDirName;
         FileUtil.mkdir(dirPath);
         return dirPath;
