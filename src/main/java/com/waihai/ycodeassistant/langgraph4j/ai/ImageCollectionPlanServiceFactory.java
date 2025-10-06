@@ -13,12 +13,12 @@ import org.springframework.context.annotation.Configuration;
 public class ImageCollectionPlanServiceFactory {
 
     @Resource
-    private ChatModel chatModel;
+    private ChatModel openAiChatModel;
 
     @Bean
     public ImageCollectionPlanService createImageCollectionPlanService() {
         return AiServices.builder(ImageCollectionPlanService.class)
-                .chatModel(chatModel)
+                .chatModel(openAiChatModel)
                 .build();
     }
 }

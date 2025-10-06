@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Configuration;
 public class CodeQualityCheckServiceFactory {
 
     @Resource
-    private ChatModel chatModel;
+    private ChatModel openAiChatModel;
 
     /**
      * 创建代码质量检查 AI 服务
@@ -23,7 +23,7 @@ public class CodeQualityCheckServiceFactory {
     @Bean
     public CodeQualityCheckService createCodeQualityCheckService() {
         return AiServices.builder(CodeQualityCheckService.class)
-                .chatModel(chatModel)
+                .chatModel(openAiChatModel)
                 .build();
     }
 }

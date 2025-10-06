@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 public class ImageCollectionServiceFactory {
 
     @Resource
-    private ChatModel chatModel;
+    private ChatModel openAiChatModel;
 
     @Resource
     private ImageSearchTool imageSearchTool;
@@ -39,7 +39,7 @@ public class ImageCollectionServiceFactory {
     @Bean
     public ImageCollectionService createImageCollectionService() {
         return AiServices.builder(ImageCollectionService.class)
-                .chatModel(chatModel)
+                .chatModel(openAiChatModel)
                 .tools(
                         imageSearchTool,
                         undrawIllustrationTool,

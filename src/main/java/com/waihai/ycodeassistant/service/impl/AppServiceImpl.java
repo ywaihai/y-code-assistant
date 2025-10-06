@@ -8,6 +8,7 @@ import cn.hutool.core.util.StrUtil;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.spring.service.impl.ServiceImpl;
 import com.waihai.ycodeassistant.ai.AiCodeGenTypeRoutingService;
+import com.waihai.ycodeassistant.ai.AiCodeGenTypeRoutingServiceFactory;
 import com.waihai.ycodeassistant.constant.AppConstant;
 import com.waihai.ycodeassistant.core.AiCodeGeneratorFacade;
 import com.waihai.ycodeassistant.core.builder.VueProjectBuilder;
@@ -15,10 +16,10 @@ import com.waihai.ycodeassistant.core.handler.StreamHandlerExecutor;
 import com.waihai.ycodeassistant.exception.BusinessException;
 import com.waihai.ycodeassistant.exception.ErrorCode;
 import com.waihai.ycodeassistant.exception.ThrowUtils;
+import com.waihai.ycodeassistant.mapper.AppMapper;
 import com.waihai.ycodeassistant.model.dto.app.AppAddRequest;
 import com.waihai.ycodeassistant.model.dto.app.AppQueryRequest;
 import com.waihai.ycodeassistant.model.entity.App;
-import com.waihai.ycodeassistant.mapper.AppMapper;
 import com.waihai.ycodeassistant.model.entity.User;
 import com.waihai.ycodeassistant.model.enums.ChatHistoryMessageTypeEnum;
 import com.waihai.ycodeassistant.model.enums.CodeGenTypeEnum;
@@ -47,7 +48,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Slf4j
-public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppService{
+public class AppServiceImpl extends ServiceImpl<AppMapper, App> implements AppService {
 
     @Resource
     private UserService userService;
@@ -68,7 +69,7 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
     private ScreenshotService screenshotService;
 
     @Resource
-    private AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService;
+    private AiCodeGenTypeRoutingServiceFactory aiCodeGenTypeRoutingServiceFactory;
 
     @Override
     public String deployApp(Long appId, User loginUser) {
@@ -141,7 +142,8 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
         app.setUserId(loginUser.getId());
         // 应用名称暂时为 initPrompt 前 12 位
         app.setAppName(initPrompt.substring(0, Math.min(initPrompt.length(), 12)));
-        // 使用 AI 智能选择代码生成类型
+        // 使用 AI 智能选择代码生成类型（多例模式）
+        AiCodeGenTypeRoutingService aiCodeGenTypeRoutingService = aiCodeGenTypeRoutingServiceFactory.createAiCodeGenTypeRoutingService();
         CodeGenTypeEnum selectedCodeGenType = aiCodeGenTypeRoutingService.routeCodeGenType(initPrompt);
         app.setCodeGenType(selectedCodeGenType.getValue());
         // 插入数据库
@@ -171,7 +173,6 @@ public class AppServiceImpl extends ServiceImpl<AppMapper, App>  implements AppS
             ThrowUtils.throwIf(!updated, ErrorCode.OPERATION_ERROR, "更新应用封面字段失败");
         });
     }
-
 
 
     @Override
