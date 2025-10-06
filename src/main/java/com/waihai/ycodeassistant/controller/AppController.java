@@ -15,9 +15,12 @@ import com.waihai.ycodeassistant.exception.BusinessException;
 import com.waihai.ycodeassistant.exception.ErrorCode;
 import com.waihai.ycodeassistant.exception.ThrowUtils;
 import com.waihai.ycodeassistant.model.dto.app.*;
+import com.waihai.ycodeassistant.model.entity.App;
 import com.waihai.ycodeassistant.model.entity.User;
-import com.waihai.ycodeassistant.model.enums.CodeGenTypeEnum;
 import com.waihai.ycodeassistant.model.vo.AppVO;
+import com.waihai.ycodeassistant.ratelimter.annotation.RateLimit;
+import com.waihai.ycodeassistant.ratelimter.enums.RateLimitType;
+import com.waihai.ycodeassistant.service.AppService;
 import com.waihai.ycodeassistant.service.ProjectDownloadService;
 import com.waihai.ycodeassistant.service.UserService;
 import jakarta.annotation.Resource;
@@ -27,8 +30,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
-import com.waihai.ycodeassistant.model.entity.App;
-import com.waihai.ycodeassistant.service.AppService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -106,6 +107,7 @@ public class AppController {
     }
 
     @GetMapping(value = "/chat/gen/code", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @RateLimit(limitType = RateLimitType.USER, rate = 5, rateInterval = 60, message = "AI 对话请求过于频繁，请稍后再试")
     public Flux<ServerSentEvent<String>> chatToGenCode(@RequestParam Long appId,
                                                        @RequestParam String message,
                                                        HttpServletRequest request) {
@@ -257,7 +259,7 @@ public class AppController {
     @PostMapping("/good/list/page/vo")
     @Cacheable(
             value = "good_app_page",
-            key = "T(com.yupi.yuaicodemother.utils.CacheKeyUtils).generateKey(#appQueryRequest)",
+            key = "T(com.waihai.ycodeassistant.utils.CacheKeyUtils).generateKey(#appQueryRequest)",
             condition = "#appQueryRequest.pageNum <= 10"
     )
     public BaseResponse<Page<AppVO>> listGoodAppVOByPage(@RequestBody AppQueryRequest appQueryRequest) {
