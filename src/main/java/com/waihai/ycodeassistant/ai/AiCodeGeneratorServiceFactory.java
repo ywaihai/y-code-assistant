@@ -2,6 +2,7 @@ package com.waihai.ycodeassistant.ai;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.waihai.ycodeassistant.ai.guardrail.PromptSafetyInputGuardrail;
 import com.waihai.ycodeassistant.ai.tools.ToolManager;
 import com.waihai.ycodeassistant.exception.BusinessException;
 import com.waihai.ycodeassistant.exception.ErrorCode;
@@ -111,6 +112,7 @@ public class AiCodeGeneratorServiceFactory {
                                 ToolExecutionResultMessage.from(toolExecutionRequest,
                                         "Error: there is no tool called " + toolExecutionRequest.name())
                         )
+                        .inputGuardrails(new PromptSafetyInputGuardrail()) // 添加输入护轨
                         .build();
             }
             // HTML 和 多文件生成，使用流式对话模型
@@ -121,6 +123,7 @@ public class AiCodeGeneratorServiceFactory {
                         .chatModel(openAiChatModel)
                         .streamingChatModel(openAiStreamingChatModel)
                         .chatMemory(chatMemory)
+                        .inputGuardrails(new PromptSafetyInputGuardrail()) // 添加输入护轨
                         .build();
             }
             default ->
