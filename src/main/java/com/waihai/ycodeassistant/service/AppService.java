@@ -53,6 +53,14 @@ public interface AppService extends IService<App> {
     AppVO getAppVO(App app);
 
     /**
+     * 获取应用封装类（无用户信息）
+     *
+     * @param app
+     * @return
+     */
+    AppVO getAppVOWithoutUser(App app);
+
+    /**
      * 获取应用封装类列表
      *
      * @param appList
